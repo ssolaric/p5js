@@ -1,9 +1,9 @@
 class Mover {
   constructor() {
-    this.position = createVector(width / 2, height / 2);
+    this.position = createVector(random(width), random(height));
     this.velocity = createVector(0, 0);
     this.acceleration = createVector(-0.001, 0.01);
-    this.topSpeed = 10;
+    this.topSpeed = 4;
   }
 
   update() {
@@ -39,16 +39,24 @@ class Mover {
   }
 }
 
-let mover;
+const NUM_MOVERS = 20;
+let movers = [];
 
 function setup() {
   createCanvas(640, 360);
-  mover = new Mover();
+  background(255);
+
+  for (let i = 0; i < NUM_MOVERS; i++) {
+    movers.push(new Mover());
+  }
 }
 
 function draw() {
   background(255);
-  mover.update();
-  mover.checkEdges();
-  mover.display();
+  // console.log(movers.length);
+  for (let i = 0; i < movers.length; i++) {
+    movers[i].update();
+    movers[i].checkEdges();
+    movers[i].display();
+  }
 }
