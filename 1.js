@@ -1,26 +1,24 @@
-let x = 0;
-let y = 0;
-let xspeed = 1;
-let yspeed = 3.3;
+let position;
+let velocity;
 
 function setup() {
   createCanvas(640, 360);
-  background(255);
+  position = createVector(100, 100);
+  velocity = createVector(1, 3.3);
 }
 
 function draw() {
   background(255);
-  x = x + xspeed;
-  y = y + yspeed;
+  position.add(velocity);
 
-  if (x > width || x < 0) {
-    xspeed = -xspeed;
+  if (position.x > width || position.x < 0) {
+    velocity.x = -velocity.x;
   }
-  if (y > height || y < 0) {
-    yspeed = -yspeed;
+  if (position.y > height || position.y < 0) {
+    velocity.y = -velocity.y;
   }
 
   stroke(0);
   fill(175);
-  ellipse(x, y, 16, 16);
+  ellipse(position.x, position.y, 16, 16);
 }
