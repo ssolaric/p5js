@@ -28,7 +28,7 @@ class Mover {
     }
 
     if (this.position.y > height) {
-      // this.position.y = height;
+      this.position.y = height;
       this.velocity.y = -this.velocity.y;
     }
   }
@@ -53,6 +53,13 @@ function draw() {
   const wind = createVector(0.001, 0);
   for (let i = 0; i < NUM_MOVERS; i++) {
     const gravity = createVector(0, 0.1 * movers[i].mass);
+    const mu = 0.01;
+    const friction = movers[i].velocity.copy();
+    friction.mult(-1);
+    friction.normalize();
+    friction.mult(mu);
+
+    movers[i].applyForce(friction);
     movers[i].applyForce(wind);
     movers[i].applyForce(gravity);
     movers[i].update();
