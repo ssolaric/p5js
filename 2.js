@@ -1,9 +1,9 @@
 class Mover {
-  constructor() {
-    this.position = createVector(random(width), random(height));
+  constructor(mass, x, y) {
+    this.position = createVector(x, y);
     this.velocity = createVector();
     this.acceleration = createVector();
-    this.mass = 1;
+    this.mass = mass;
   }
 
   update() {
@@ -38,22 +38,28 @@ class Mover {
   }
 }
 
-let mover;
+const NUM_MOVERS = 20;
+let movers = [];
 
 function setup() {
   createCanvas(640, 360);
-  mover = new Mover();
+  for (let i = 0; i < NUM_MOVERS; i++) {
+    movers.push(new Mover(random(0.1, 5), 400, 400));
+  }
 }
 
 function draw() {
   background(255);
+  const wind = createVector(0.01, 0);
   const gravity = createVector(0, 0.1);
-  mover.applyForce(gravity);
-  if (mouseIsPressed) {
-    const wind = createVector(0.1, 0);
-    mover.applyForce(wind);
+  for (let i = 0; i < NUM_MOVERS; i++) {
+    movers[i].applyForce(wind);
+    movers[i].applyForce(gravity);
+    const k = 0.001;
+    const pushBackForce = createVector(-k * movers[i].position.x, -k * movers[i].position.y);
+    movers[i].applyForce(pushBackForce);
+    movers[i].update();
+    movers[i].display();
+    movers[i].checkEdges();
   }
-  mover.update();
-  mover.display();
-  mover.checkEdges();
 }
