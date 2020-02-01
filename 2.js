@@ -73,29 +73,50 @@ class Liquid {
   }
 }
 
-const NUM_MOVERS = 20;
+class Attractor {
+  constructor() {
+    this.position = createVector(width / 2, height / 2);
+    this.mass = 20;
+    this.G = 0.4;
+  }
+
+  display() {
+    stroke(0);
+    fill(175, 200);
+    ellipse(this.position.x, this.position.y, this.mass * 2, this.mass * 2);
+  }
+
+  attract(mover) {
+    let force = p5.Vector.sub(this.position, mover.position);
+    let distance = force.mag();
+    distance = constrain(distance, 5.0, 25.0);
+    force.normalize();
+
+    let strength = (this.G * this.mass * mover.mass) / (distance * distance);
+    force.mult(strength);
+    return force;
+  }
+}
+
+const NUM_MOVERS = 10;
 let movers = [];
-let liquid;
+let attractor;
 
 function setup() {
   createCanvas(640, 360);
   for (let i = 0; i < NUM_MOVERS; i++) {
-    movers.push(new Mover(random(0.1, 5), 0, 0));
+    movers.push(new Mover(random(0.1, 2), random(width), random(height)));
   }
-  liquid = new Liquid(0, height / 2, width, height / 2, 0.1);
+  attractor = new Attractor();
 }
 
 function draw() {
   background(255);
-  liquid.display();
+  attractor.display();
   for (let i = 0; i < NUM_MOVERS; i++) {
-    if (movers[i].isInside(liquid)) {
-      movers[i].drag(liquid);
-    }
-    const gravity = createVector(0, 0.1 * movers[i].mass);
-    movers[i].applyForce(gravity);
+    const force = attractor.attract(movers[i]);
+    movers[i].applyForce(force);
     movers[i].update();
     movers[i].display();
-    movers[i].checkEdges();
   }
 }
