@@ -20,15 +20,15 @@ class Mover {
 
   checkEdges() {
     if (this.position.x > width) {
-      this.position.x = width;
+      // this.position.x = width;
       this.velocity.x = -this.velocity.x;
     } else if (this.position.x < 0) {
-      this.position.x = 0;
+      // this.position.x = 0;
       this.velocity.x = -this.velocity.x;
     }
 
     if (this.position.y > height) {
-      this.position.y = height;
+      // this.position.y = height;
       this.velocity.y = -this.velocity.y;
     }
   }
@@ -44,21 +44,17 @@ let movers = [];
 function setup() {
   createCanvas(640, 360);
   for (let i = 0; i < NUM_MOVERS; i++) {
-    movers.push(new Mover(random(0.1, 5), 0, height / 2));
+    movers.push(new Mover(random(0.1, 5), 0, 0));
   }
 }
 
 function draw() {
   background(255);
-  const wind = createVector(0.01, 0);
-  const gravity = createVector(0, 0.1);
+  const wind = createVector(0.001, 0);
   for (let i = 0; i < NUM_MOVERS; i++) {
-    // movers[i].applyForce(wind);
-    // movers[i].applyForce(gravity);
-    const k = 0.00005;
-    // const pushBackForce = createVector(-k * (movers[i].position.x - width / 2), -k * (movers[i].position.y - height / 2));
-    const pushBackForce = createVector(-k * (movers[i].position.x - width / 2), 0);
-    movers[i].applyForce(pushBackForce);
+    const gravity = createVector(0, 0.1 * movers[i].mass);
+    movers[i].applyForce(wind);
+    movers[i].applyForce(gravity);
     movers[i].update();
     movers[i].display();
     movers[i].checkEdges();
