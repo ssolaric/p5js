@@ -54,6 +54,17 @@ class Mover {
     drag.mult(dragMagnitude);
     this.applyForce(drag);
   }
+
+  attract(mover) {
+    let force = p5.Vector.sub(this.position, mover.position);
+    let distance = force.mag();
+    distance = constrain(distance, 5.0, 25.0);
+    force.normalize();
+
+    let strength = (this.G * this.mass * mover.mass) / (distance * distance);
+    force.mult(strength);
+    return force;
+  }
 }
 
 class Liquid {
@@ -114,7 +125,13 @@ function draw() {
   background(255);
   attractor.display();
   for (let i = 0; i < NUM_MOVERS; i++) {
-    const force = attractor.attract(movers[i]);
+    for (let j = 0; j < NUM_MOVERS; j++) {
+      if (i != j) {
+        const force = movers[j].attract(movers[i]);
+        movers[i].applyForce(force);
+      }
+    }
+    
     movers[i].applyForce(force);
     movers[i].update();
     movers[i].display();
