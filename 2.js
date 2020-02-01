@@ -44,7 +44,7 @@ let movers = [];
 function setup() {
   createCanvas(640, 360);
   for (let i = 0; i < NUM_MOVERS; i++) {
-    movers.push(new Mover(random(0.1, 5), 400, 400));
+    movers.push(new Mover(random(0.1, 5), 0, height / 2));
   }
 }
 
@@ -53,10 +53,11 @@ function draw() {
   const wind = createVector(0.01, 0);
   const gravity = createVector(0, 0.1);
   for (let i = 0; i < NUM_MOVERS; i++) {
-    movers[i].applyForce(wind);
-    movers[i].applyForce(gravity);
-    const k = 0.001;
-    const pushBackForce = createVector(-k * movers[i].position.x, -k * movers[i].position.y);
+    // movers[i].applyForce(wind);
+    // movers[i].applyForce(gravity);
+    const k = 0.00005;
+    // const pushBackForce = createVector(-k * (movers[i].position.x - width / 2), -k * (movers[i].position.y - height / 2));
+    const pushBackForce = createVector(-k * (movers[i].position.x - width / 2), 0);
     movers[i].applyForce(pushBackForce);
     movers[i].update();
     movers[i].display();
