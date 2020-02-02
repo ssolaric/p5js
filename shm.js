@@ -1,12 +1,16 @@
+let angle = 0;
+let angularVelocity = 0.05;
+
 function setup() {
   createCanvas(640,360);
 }
 
 function draw() {
   background(255);
-  let period = 120;
   let amplitude = 100;
-  let x = amplitude * cos(TWO_PI * frameCount / period);
+  let x = amplitude * cos(angle);
+  angle += angularVelocity;
+  ellipseMode(CENTER);
   stroke(0);
   fill(175);
   translate(width / 2, height / 2);
